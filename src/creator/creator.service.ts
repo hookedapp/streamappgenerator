@@ -1,16 +1,14 @@
 import { Injectable } from '@nestjs/common';
 import { CreateCreatorDto } from './dto/create-creator.dto';
 import { UpdateCreatorDto } from './dto/update-creator.dto';
-import fs from 'fs';
-import path from 'path';
 
 @Injectable()
 export class CreatorService {
   create(createCreatorDto: CreateCreatorDto) {
     const shelljs = require('shelljs')
     const { appName,accessToken, locationId } = createCreatorDto
-    // shelljs.exec(`cd ../ && expo init ${appName} --template hookedapp/streamexpotemplate`, function(code, stdout, stderr) {
-    //   console.log('Exit code:', code);
+    shelljs.exec(`cd ../ && expo init ${appName} --template hookedapp/streamexpotemplate`, function(code, stdout, stderr) {
+      console.log('Exit code:', code);
     //   console.log('Program output:', stdout);
     //   console.log('Program stderr:', stderr);
     //   shelljs.exec(`echo stdout:${stdout}`)
@@ -62,14 +60,14 @@ export class CreatorService {
       const javascriptFile = `export default {
   extra: {
       apiUrl: 'https://api-dev-unstable.hookedapi.com',
-      accessToken: ${accessToken},
-        locationId: ${locationId}
+      accessToken: '${accessToken}',
+        locationId: '${locationId}'
   },
 };
 `
 
       fs.writeFileSync(path.resolve(__dirname, `../../../${appName}/app.config.js`), javascriptFile);
-    // });
+    });
     return 'This action adds a new creator';
   }
 
