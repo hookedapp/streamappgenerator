@@ -17,6 +17,11 @@ export class CreatorController {
     return this.creatorService.build(createCreatorDto);
   }
 
+  @Post('/first-build')
+  firstBuild(@Body() createCreatorDto: CreateCreatorDto) {
+    return this.creatorService.firstBuild(createCreatorDto);
+  }
+
   @Post('/upload')
   upload(@Body() createCreatorDto: CreateCreatorDto) {
     return this.creatorService.upload(createCreatorDto);

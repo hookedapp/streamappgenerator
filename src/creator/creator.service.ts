@@ -58,10 +58,17 @@ export class CreatorService {
 
 
       const javascriptFile = `export default {
+android: {
+  package: 'com.hookedstream.${appName}',
+},
+ios: {
+  bundleIdentifier: 'com.hookedstream.${appName}',
+},
   extra: {
       apiUrl: 'https://api-dev-unstable.hookedapi.com',
       accessToken: '${accessToken}',
-        locationId: '${locationId}'
+        locationId: '${locationId}',
+        appName: '${appName}'
   },
 };
 `
@@ -69,6 +76,24 @@ export class CreatorService {
       fs.writeFileSync(path.resolve(__dirname, `../../../${appName}/app.config.js`), javascriptFile);
     });
     return 'This action adds a new creator';
+  }
+
+  firstBuild(createCreatorDto: CreateCreatorDto) {
+    const shelljs = require('shelljs')
+    const { appName } = createCreatorDto
+    shelljs.exec(`cd ../${appName} && eas build:configure --platform all && eas build --platform ios`, () => {
+      // console.log('Exit code:', code);
+      // shelljs.exec(`y`, function(code) {
+      //   console.log('Exit code:', code);
+      // });
+// console.log("time to send input")
+    });
+    // setTimeout(() => {
+    //   shelljs.exec(`y`, function(code, stdout, stderr) {
+    //     console.log('Exit code:', code);
+    //   });
+    // }, 10000)
+    return 'this is creating!'
   }
 
   build(createCreatorDto: CreateCreatorDto) {
@@ -82,6 +107,11 @@ export class CreatorService {
       shelljs.exec(`echo code:${code}`)
       shelljs.exec(`echo stderr:${stderr}`)
     });
+    setTimeout(() => {
+    shelljs.exec(`y`, function(code, stdout, stderr) {
+      console.log('Exit code:', code);
+    });
+    }, 10000)
     return 'this is creating!'
   }
 
