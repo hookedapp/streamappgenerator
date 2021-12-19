@@ -7,7 +7,7 @@ export class CreatorService {
   create(createCreatorDto: CreateCreatorDto) {
     const shelljs = require('shelljs')
     const { appName,accessToken, locationId } = createCreatorDto
-    shelljs.exec(`cd ../ && expo init ${appName} --template hookedapp/streamexpotemplate`, function(code, stdout, stderr) {
+    shelljs.exec(`cd ../ && expo init ${appName} --template hookedapp/streamexpotemplate && touch app.json`, function(code, stdout, stderr) {
       console.log('Exit code:', code);
     //   console.log('Program output:', stdout);
     //   console.log('Program stderr:', stderr);
