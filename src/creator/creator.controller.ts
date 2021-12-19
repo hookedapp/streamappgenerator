@@ -32,6 +32,13 @@ export class CreatorController {
     return this.creatorService.update(+id, updateCreatorDto);
   }
 
+
+  @Post('health')
+  health() {
+    return "healthy"
+  }
+
+
   @Delete(':id')
   remove(@Param('id') id: string) {
     return this.creatorService.remove(+id);
