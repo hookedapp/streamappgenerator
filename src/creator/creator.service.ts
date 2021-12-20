@@ -66,7 +66,6 @@ export class CreatorService {
         LOCATION_ID=${locationId}\n
         APP_NAME="${appName}"\n
         APP_TITLE="${appTitle}"\n
-        LIGHT_MODE="true"\n
 `
 
       fs.writeFileSync(path.resolve(__dirname, `../../../${appName}/.env`), javascriptFile);
@@ -94,11 +93,14 @@ console.log("DONE")
         APP_NAME="${appName}"\n
         APP_TITLE="${appTitle}"\n
 `
-
-    fs.writeFileSync(path.resolve(__dirname, `../../../${appName}/.env`), javascriptFile);
-    shelljs.exec(`cd ../${appName} && expo publish`, function() {
+    shelljs.exec(`cd ../${appName} && rm -rf .env`, function() {
       // export NODE_OPTIONS=--openssl-legacy-provider
-      console.log("DONE")
+      console.log("ALMOST DONE")
+      fs.writeFileSync(path.resolve(__dirname, `../../../${appName}/.env`), javascriptFile);
+      shelljs.exec(`cd ../${appName} && expo publish`, function() {
+        // export NODE_OPTIONS=--openssl-legacy-provider
+        console.log("DONE")
+      })
     })
     return 'this is publish!'
   }
