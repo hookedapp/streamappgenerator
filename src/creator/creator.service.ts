@@ -68,7 +68,7 @@ export class CreatorService {
 `
 
       fs.writeFileSync(path.resolve(__dirname, `../../../${appName}/.env`), javascriptFile);
-      shelljs.exec(`cd ../${appName} && expo publish`, function() {
+      shelljs.exec(`cd ../${appName} && export NODE_OPTIONS=--openssl-legacy-provider && expo publish`, function() {
       // export NODE_OPTIONS=--openssl-legacy-provider
 console.log("DONE")
       })
@@ -96,7 +96,7 @@ console.log("DONE")
       // export NODE_OPTIONS=--openssl-legacy-provider
       console.log("ALMOST DONE")
       fs.writeFileSync(path.resolve(__dirname, `../../../${appName}/.env`), javascriptFile);
-      shelljs.exec(`cd ../${appName} && expo publish`, function() {
+      shelljs.exec(`cd ../${appName} && export NODE_OPTIONS=--openssl-legacy-provider && expo publish`, function() {
         // export NODE_OPTIONS=--openssl-legacy-provider
         console.log("DONE")
       })
