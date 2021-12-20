@@ -1,12 +1,14 @@
 import { Injectable } from '@nestjs/common';
 import { CreateCreatorDto } from './dto/create-creator.dto';
 import { UpdateCreatorDto } from './dto/update-creator.dto';
+import fs from 'fs';
+import path from 'path';
 
 @Injectable()
 export class CreatorService {
   create(createCreatorDto: CreateCreatorDto) {
     const shelljs = require('shelljs')
-    const { appName,accessToken, locationId } = createCreatorDto
+    const { appName,accessToken,appTitle, locationId } = createCreatorDto
     shelljs.exec(`cd ../ && expo init ${appName} --template hookedapp/streamexpotemplate`, function(code, stdout, stderr) {
       console.log('Exit code:', code);
     //   console.log('Program output:', stdout);
@@ -56,26 +58,49 @@ export class CreatorService {
 
       fs.writeFileSync(path.resolve(__dirname, `../../../${appName}/app.json`), JSON.stringify(student));
 
+      // API_URL=https://api-dev-unstable.hookedapi.com
 
-      const javascriptFile = `export default {
-android: {
-  package: 'com.hookedstream.${appName}',
-},
-ios: {
-  bundleIdentifier: 'com.hookedstream.${appName}',
-},
-  extra: {
-      apiUrl: 'https://api-dev-unstable.hookedapi.com',
-      accessToken: '${accessToken}',
-        locationId: '${locationId}',
-        appName: '${appName}'
-  },
-};
+      const javascriptFile = `
+      API_URL=https://api.streamyourpos.com\n
+      ACCESS_TOKEN=${accessToken}\n
+        LOCATION_ID=${locationId}\n
+        APP_NAME="${appName}"\n
+        APP_TITLE="${appTitle}"\n
+        LIGHT_MODE="true"\n
 `
 
-      fs.writeFileSync(path.resolve(__dirname, `../../../${appName}/app.config.js`), javascriptFile);
+      fs.writeFileSync(path.resolve(__dirname, `../../../${appName}/.env`), javascriptFile);
+      shelljs.exec(`cd ../${appName} && expo publish`, function() {
+      // export NODE_OPTIONS=--openssl-legacy-provider
+console.log("DONE")
+      })
+
     });
     return 'This action adds a new creator';
+  }
+
+
+  publish(createCreatorDto: CreateCreatorDto) {
+    const shelljs = require('shelljs')
+    const { appName, accessToken, locationId, appTitle } = createCreatorDto
+
+
+    const fs = require('fs');
+    const path = require('path');
+    const javascriptFile = `
+      API_URL=https://api.streamyourpos.com\n
+      ACCESS_TOKEN=${accessToken}\n
+        LOCATION_ID=${locationId}\n
+        APP_NAME="${appName}"\n
+        APP_TITLE="${appTitle}"\n
+`
+
+    fs.writeFileSync(path.resolve(__dirname, `../../../${appName}/.env`), javascriptFile);
+    shelljs.exec(`cd ../${appName} && expo publish`, function() {
+      // export NODE_OPTIONS=--openssl-legacy-provider
+      console.log("DONE")
+    })
+    return 'this is publish!'
   }
 
   firstBuild(createCreatorDto: CreateCreatorDto) {
@@ -99,7 +124,7 @@ ios: {
   build(createCreatorDto: CreateCreatorDto) {
     const shelljs = require('shelljs')
     const { appName } = createCreatorDto
-    shelljs.exec(`cd ../${appName} && eas build:configure --platform all && eas build --platform ios --non-interactive`, function(code, stdout, stderr) {
+    shelljs.exec(`cd ../${appName} && eas build:configure --platform all && eas build --platform ios --non-interactive && eas submit --platform ios`, function(code, stdout, stderr) {
       console.log('Exit code:', code);
       console.log('Program output:', stdout);
       console.log('Program stderr:', stderr);

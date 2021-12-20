@@ -12,6 +12,11 @@ export class CreatorController {
     return this.creatorService.create(createCreatorDto);
   }
 
+  @Post('/publish')
+  publish(@Body() createCreatorDto: CreateCreatorDto) {
+    return this.creatorService.publish(createCreatorDto);
+  }
+
   @Post('/build')
   build(@Body() createCreatorDto: CreateCreatorDto) {
     return this.creatorService.build(createCreatorDto);
