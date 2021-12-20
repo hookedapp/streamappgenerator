@@ -8,7 +8,7 @@ import path from 'path';
 export class CreatorService {
   create(createCreatorDto: CreateCreatorDto) {
     const shelljs = require('shelljs')
-    const { appName,accessToken,appTitle, locationId } = createCreatorDto
+    const { appName,accessToken,appTitle, locationId, apiUrl } = createCreatorDto
     shelljs.exec(`cd ../ && expo init ${appName} --template hookedapp/streamexpotemplate`, function(code, stdout, stderr) {
       console.log('Exit code:', code);
     //   console.log('Program output:', stdout);
@@ -58,10 +58,9 @@ export class CreatorService {
 
       fs.writeFileSync(path.resolve(__dirname, `../../../${appName}/app.json`), JSON.stringify(student));
 
-      // API_URL=https://api-dev-unstable.hookedapi.com
 
       const javascriptFile = `
-      API_URL=https://api.streamyourpos.com\n
+      API_URL=${apiUrl}\n
       ACCESS_TOKEN=${accessToken}\n
         LOCATION_ID=${locationId}\n
         APP_NAME="${appName}"\n
@@ -81,13 +80,13 @@ console.log("DONE")
 
   publish(createCreatorDto: CreateCreatorDto) {
     const shelljs = require('shelljs')
-    const { appName, accessToken, locationId, appTitle } = createCreatorDto
+    const { appName,apiUrl, accessToken, locationId, appTitle } = createCreatorDto
 
 
     const fs = require('fs');
     const path = require('path');
     const javascriptFile = `
-      API_URL=https://api.streamyourpos.com\n
+      API_URL=${apiUrl}\n
       ACCESS_TOKEN=${accessToken}\n
         LOCATION_ID=${locationId}\n
         APP_NAME="${appName}"\n

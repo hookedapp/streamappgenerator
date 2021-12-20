@@ -3,4 +3,5 @@ export class CreateCreatorDto {
   locationId: string
   accessToken: string
   appTitle: string
+  apiUrl: string
 }
